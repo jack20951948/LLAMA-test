@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "llama-test"
+version = "0.1.0"
+description = ""
+authors = ["jack-chang <jack.chang@hp.com>"]
+readme = "README.md"
+packages = [{include = "llama_test"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+huggingface_hub = "*"
+transformers = "4.31.0"
+sentencepiece = "0.1.99"
+torch = "2.0.1+cu118"
+bitsandbytes = "git+https://github.com/Keith-Hon/bitsandbytes-windows.git"
+datasets = "2.13.1"
+accelerate = "*"
+trl = "*"
+peft = "*"
+scipy = "*"
+einops = "*"
+wandb = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
