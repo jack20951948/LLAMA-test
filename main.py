@@ -189,7 +189,7 @@ def create_peft_config(modules):
         r=16,  # dimension of the updated matrices
         lora_alpha=64,  # parameter for scaling
         target_modules=modules,
-        lora_dropout=0.1,  # dropout probability for layers
+        lora_dropout=0.3,  # dropout probability for layers
         bias="none",
         task_type="CAUSAL_LM",
     )
@@ -246,6 +246,7 @@ dataset_abilities = preprocess_dataset_abilities(tokenizer, max_length, random.s
 dataset_tips = preprocess_dataset_tips(tokenizer, max_length, random.seed(10), dataset_tips)
 
 combined_dataset = concatenate_datasets([dataset_abilities, dataset_tips])
+combined_dataset = combined_dataset.shuffle(seed=random.seed(10))
 
 # print(combined_dataset['text'][0])
 
@@ -274,7 +275,7 @@ def train(model, tokenizer, dataset, output_dir):
         model=model,
         train_dataset=dataset,
         args=TrainingArguments(
-            per_device_train_batch_size=1,
+            per_device_train_batch_size=16,
             gradient_accumulation_steps=4,
             warmup_steps=2,
             max_steps=50,
@@ -287,7 +288,7 @@ def train(model, tokenizer, dataset, output_dir):
         dataset_text_field="text",
         max_seq_length=max_seq_length,
         tokenizer=tokenizer,
-        #data_collator=DataCollatorForLanguageModeling(tokenizer, mlm=False)
+        data_collator=DataCollatorForLanguageModeling(tokenizer, mlm=False)
     )
 
     model.config.use_cache = False  # re-enable for inference to speed up predictions for similar inputs
